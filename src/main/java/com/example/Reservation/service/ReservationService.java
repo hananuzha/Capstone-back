@@ -55,7 +55,12 @@ public class ReservationService {
             }
             UserProfile userProfile = userProfileRepository.findByPhone(phoneNumber);
             if(!Optional.ofNullable(userProfile).isPresent()){
-                userProfile = new UserProfile(null,reservationObject.getUserName(),phoneNumber,null);
+
+                userProfile = new UserProfile();
+                userProfile.setName(reservationObject.getUserName());
+                userProfile.setPhone(phoneNumber);
+
+                userProfileRepository.save(userProfile);
             }
             double sum = 0;
             //now i have to get scheduale information for each day to create reservation for each day

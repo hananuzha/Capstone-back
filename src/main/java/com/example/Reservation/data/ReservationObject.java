@@ -14,4 +14,5 @@ public class ReservationObject {
     Address address;
     String paymentMethod;
     String note;
+
 }

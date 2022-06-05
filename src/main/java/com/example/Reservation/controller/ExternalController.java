@@ -4,14 +4,18 @@
  * and open the template in the editor.
  */
 package com.example.Reservation.controller;
-
+import java.util.UUID;
 
 import com.example.Reservation.Entity.Property;
 import com.example.Reservation.Entity.PropertySchedule;
+import com.example.Reservation.Entity.UserProfile;
+import com.example.Reservation.auth.AuthToken;
+import com.example.Reservation.data.LoginRequest;
 import com.example.Reservation.data.ReservationObject;
 import com.example.Reservation.service.PropertyScheduleService;
 import com.example.Reservation.service.PropertyService;
 import com.example.Reservation.service.ReservationService;
+import com.example.Reservation.service.UserProfileService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,13 +34,16 @@ public class ExternalController {
     private static final String GET_PROPERTY_BY_ID = "/property/{id}";
     private static final String POST_RESERVATION = "/reservation/";
     private static final String GET_SCHEDULE = "/schedule";
-    
+    private static final String LOGIN = "/login";
+
     @Autowired
     private PropertyService propertyService;
     @Autowired
     private ReservationService reservationService;
     @Autowired
     private PropertyScheduleService propertyScheduleService;
+    @Autowired
+    private UserProfileService userProfileService;
 
 
 
@@ -89,5 +96,22 @@ public class ExternalController {
 
 
 
-
+    @PostMapping(path = LOGIN)
+    public AuthToken login(@RequestBody LoginRequest loginRequest) {
+       AuthToken response = new AuthToken();
+        try {
+            UserProfile user = userProfileService.login(loginRequest.getPhoneNumber(), loginRequest.getPassword());
+            if (user == null) {
+                response.setMessage("you have to regsiter first");
+                return response;
+            }
+            String token =UUID.randomUUID().toString();
+            response.setUserProfile(user);
+            response.setMessage("success");
+            response.setToken(token);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return response;
+    }
 }

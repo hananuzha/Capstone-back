@@ -1,5 +1,6 @@
 package com.example.Reservation.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class UserProfile {
     private String name;
 
     private String phone;
+    @JsonIgnore()
+    private String password;
 
     @OneToMany(mappedBy = "userProfile",orphanRemoval = true)
     @JsonIgnoreProperties("userProfile")

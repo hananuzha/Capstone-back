@@ -181,6 +181,8 @@ public class InternalController {
         }
     }
 
+
+
     @PostMapping(path = POST_PROPERTY_IMAGE)
     public String propertyImage(
             @RequestParam(name = "propertyId")Integer propertyId,
